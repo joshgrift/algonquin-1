@@ -1,0 +1,1 @@
+/Applications/Godot_mono.app/Contents/MacOS/Godot --path .

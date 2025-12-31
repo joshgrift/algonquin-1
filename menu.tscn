@@ -24,6 +24,7 @@ layout_mode = 2
 
 [node name="ServerIP" type="LineEdit" parent="CenterContainer/VBoxContainer/MultiplayerControls"]
 layout_mode = 2
+text = "127.0.0.1"
 placeholder_text = "192.168.1.1"
 max_length = 15
 expand_to_text_length = true

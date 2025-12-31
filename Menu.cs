@@ -14,22 +14,30 @@ public partial class Menu : Node2D
 		var hostButton = MultiplayerControls.GetNodeOrNull<Button>("HostButton");
 		hostButton.ButtonDown += () =>
 		{
-			var multiplayer = new ENetMultiplayerPeer();
-			multiplayer.CreateServer(7777);
-			GD.Print("Hosting multiplayer session on port 7777");
+			var networkManager = GetNode<NetworkManager>("/root/NetworkManager");
+			networkManager.CreateServer(7777);
 		};
 
 		var joinButton = MultiplayerControls.GetNodeOrNull<Button>("JoinButton");
 		joinButton.ButtonDown += () =>
 		{
-			var ipBox = MultiplayerControls.GetNodeOrNull<Button>("ServerIP");
+			var ipBox = MultiplayerControls.GetNodeOrNull<LineEdit>("ServerIP");
+			var ip = ipBox.Text.Trim();
+			var networkManager = GetNode<NetworkManager>("/root/NetworkManager");
+			networkManager.CreateClient(ip, 7777);
 		};
 
 		StartButton.ButtonDown += () =>
 		{
-			GetTree().ChangeSceneToFile("res://play.tscn");
+			Rpc(MethodName.StartGame);
 		};
 
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void StartGame()
+	{
+		GetTree().ChangeSceneToFile("res://play.tscn");
 	}
 
 	public override void _Input(InputEvent @event)

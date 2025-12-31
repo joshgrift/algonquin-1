@@ -32,6 +32,14 @@ public partial class Player : CharacterBody3D, ICollector
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (IsMultiplayerAuthority())
+		{
+			UpdateMovement((float)delta);
+		}
+	}
+
+	private void UpdateMovement(float delta)
+	{
 		var pivot = GetNode<Node3D>("Pivot");
 
 		// Get input for forward/backward movement

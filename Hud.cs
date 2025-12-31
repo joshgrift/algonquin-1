@@ -5,11 +5,40 @@ public partial class Hud : CanvasLayer
 {
 	[Export] public Container InventoryList;
 
-	[Export] public Player Player;
+	private Player _player;
+	private int _retryCount = 0;
+	private const int MaxRetries = 30; // Try for ~1 second
 
 	public override void _Ready()
 	{
-		Player.InventoryChanged += OnInventoryChanged;
+		// Start looking for the player
+		FindLocalPlayer();
+	}
+
+	private void FindLocalPlayer()
+	{
+		// Find the player that we control
+		var myPeerId = Multiplayer.GetUniqueId();
+		_player = GetNodeOrNull<Player>($"/root/Play/SpawnPoint/Player{myPeerId}");
+
+		if (_player != null)
+		{
+			_player.InventoryChanged += OnInventoryChanged;
+			GD.Print($"HUD connected to Player{myPeerId}");
+		}
+		else
+		{
+			_retryCount++;
+			if (_retryCount < MaxRetries)
+			{
+				// Retry in the next frame
+				GetTree().CreateTimer(0.033f).Timeout += FindLocalPlayer;
+			}
+			else
+			{
+				GD.PrintErr($"Could not find Player{myPeerId} after {MaxRetries} attempts");
+			}
+		}
 	}
 
 	private void OnInventoryChanged(InventoryItemType itemType, int newAmount)

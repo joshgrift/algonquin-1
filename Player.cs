@@ -34,8 +34,6 @@ public partial class Player : CharacterBody3D, ICollector
 	{
 		var pivot = GetNode<Node3D>("Pivot");
 
-		_inventory.AddItem(InventoryItemType.Wood, 1);
-
 		// Get input for forward/backward movement
 		float forwardInput = 0.0f;
 		if (Input.IsActionPressed("move_forward"))

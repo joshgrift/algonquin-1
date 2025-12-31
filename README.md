@@ -8,5 +8,12 @@ Edit in the Godot 4 editor. Build and run there. If you want to test multiplayer
 
 Please submit a PR, learning godot, so any and all suggestions welcome.
 
+## Third Party
+- [GoDot](https://godotengine.org/)
+- Kenney.nl
+  - [Prototype Textures](https://kenney.nl/assets/prototype-textures)
+  - [Pirate Pack](https://kenney.nl/assets/pirate-kit)
+
+
 ## Change log
 hahaha. So early my friends, so early.

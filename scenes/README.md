@@ -1,0 +1,1 @@
+Each folder is a scene and all the resources that only interact with that scene specifically. This includes other scenes, scripts, .tres files, etc.

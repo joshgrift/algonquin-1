@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://c8c63pod53w2l"]
 
-[ext_resource type="Script" uid="uid://cie1vrfri8q8x" path="res://Play.cs" id="1_j5m8q"]
-[ext_resource type="Script" uid="uid://cxvxoxqx6wkup" path="res://Hud.cs" id="2_y08r1"]
-[ext_resource type="Theme" uid="uid://sj508xa6kulh" path="res://hud_theme.tres" id="3_3ib3j"]
+[ext_resource type="Script" uid="uid://cie1vrfri8q8x" path="res://scenes/play/Play.cs" id="1_j5m8q"]
+[ext_resource type="Script" uid="uid://cxvxoxqx6wkup" path="res://scenes/play/Hud.cs" id="2_y08r1"]
+[ext_resource type="Theme" uid="uid://sj508xa6kulh" path="res://scenes/play/hud_theme.tres" id="3_3ib3j"]
 [ext_resource type="Texture2D" uid="uid://0xkhvjlfg55v" path="res://art/proto/Dark/texture_05.png" id="4_iu7w4"]
-[ext_resource type="PackedScene" uid="uid://bkdqs4u6efsoq" path="res://collection_point.tscn" id="6_ccytq"]
+[ext_resource type="PackedScene" uid="uid://bkdqs4u6efsoq" path="res://scenes/collectonPoint/collection_point.tscn" id="6_ccytq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
 size = Vector3(200, 10, 200)
@@ -20,9 +20,10 @@ size = Vector3(200, 1, 299)
 script = ExtResource("1_j5m8q")
 _playerSpawner = NodePath("SpawnPoint/MultiplayerSpawner")
 
-[node name="HUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("InventoryList")]
+[node name="HUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("InventoryList", "ReadyToFireContainer")]
 script = ExtResource("2_y08r1")
 InventoryList = NodePath("MarginContainer/InventoryList")
+ReadyToFireContainer = NodePath("ReadyToFire")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD"]
 offset_right = 40.0
@@ -30,6 +31,20 @@ offset_right = 40.0
 [node name="InventoryList" type="VBoxContainer" parent="HUD/MarginContainer"]
 layout_mode = 2
 theme = ExtResource("3_3ib3j")
+
+[node name="ReadyToFire" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="HUD/ReadyToFire"]
+layout_mode = 0
+offset_left = 526.0
+offset_top = 619.0
+offset_right = 640.0
+offset_bottom = 642.0
+text = "READY TO FIRE"
 
 [node name="Ground" type="StaticBody3D" parent="."]
 

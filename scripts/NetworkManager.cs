@@ -1,3 +1,5 @@
+namespace Algonquin1;
+
 using Godot;
 
 // This is an autoload singleton that persists across scene changes

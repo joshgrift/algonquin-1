@@ -5,6 +5,8 @@ public partial class Hud : CanvasLayer
 {
 	[Export] public Container InventoryList;
 
+	[Export] public CanvasItem ReadyToFireContainer;
+
 	private Player _player;
 	private int _retryCount = 0;
 	private const int MaxRetries = 30; // Try for ~1 second
@@ -24,6 +26,17 @@ public partial class Hud : CanvasLayer
 		if (_player != null)
 		{
 			_player.InventoryChanged += OnInventoryChanged;
+
+			_player.CannonReadyToFire += () =>
+			{
+				ReadyToFireContainer.Visible = true;
+			};
+
+			_player.CannonFired += () =>
+			{
+				ReadyToFireContainer.Visible = false;
+			};
+
 			GD.Print($"HUD connected to Player{myPeerId}");
 		}
 		else

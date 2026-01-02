@@ -1,0 +1,1 @@
+All code not directly attached to a scene. 

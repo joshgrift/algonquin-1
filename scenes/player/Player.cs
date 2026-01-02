@@ -6,6 +6,12 @@ public partial class Player : CharacterBody3D, ICollector
 	[Signal]
 	public delegate void InventoryChangedEventHandler(InventoryItemType itemType, int newAmount);
 
+	[Signal]
+	public delegate void CannonFiredEventHandler();
+
+	[Signal]
+	public delegate void CannonReadyToFireEventHandler();
+
 	[Export]
 	public float MaxSpeed { get; set; } = 14.0f;
 
@@ -24,11 +30,19 @@ public partial class Player : CharacterBody3D, ICollector
 	[Export]
 	public float MinTurnSpeed { get; set; } = 2.0f;
 
+	[Export] public Node3D CannonPivot;
+
 	private float _currentSpeed = 0.0f;
 
 	private Vector3 _targetVelocity = Vector3.Zero;
 
 	private readonly Inventory _inventory = new();
+
+	private PackedScene _cannonBallScene;
+
+	private int _fireCoolDownInSeconds = 2;
+
+	private double _firedTimerCountdown = 0;
 
 	public override void _Ready()
 	{
@@ -39,13 +53,41 @@ public partial class Player : CharacterBody3D, ICollector
 			camera.Current = IsMultiplayerAuthority();
 			GD.Print($"{Name}: Camera enabled = {camera.Current}");
 		}
+
+		_cannonBallScene = GD.Load<PackedScene>("res://scenes/cannon_ball/cannon_ball.tscn");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		if (IsMultiplayerAuthority())
 		{
+			// Movement
 			UpdateMovement((float)delta);
+
+			// Firing Cannon 
+			if (_firedTimerCountdown < 0)
+			{
+				_firedTimerCountdown = 0;
+				EmitSignal(SignalName.CannonReadyToFire);
+			}
+			else
+			{
+				_firedTimerCountdown -= delta;
+			}
+
+			if (Input.IsActionPressed("fire_cannons") && _firedTimerCountdown <= 0)
+			{
+				CannonBall ball = _cannonBallScene.Instantiate<CannonBall>();
+
+				var pivot = GetNode<Node3D>("Pivot");
+
+				ball.GlobalPosition = CannonPivot.GlobalPosition;
+				ball.Launch(pivot.GlobalTransform.Basis.Z * -1, _currentSpeed, "josh");
+
+				_firedTimerCountdown = _fireCoolDownInSeconds;
+				EmitSignal(SignalName.CannonFired);
+				GetParent().AddChild(ball);
+			}
 		}
 	}
 

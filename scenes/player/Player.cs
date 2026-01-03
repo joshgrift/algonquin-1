@@ -195,6 +195,18 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 	{
 		GD.Print($"{Name} updating inventory: {item} by {amount} (price: {price})");
 
+		if (amount < 0 && _inventory.GetItemCount(item) < -amount)
+		{
+			GD.PrintErr($"Not enough {item} to remove. Current: {_inventory.GetItemCount(item)}, Tried to remove: {-amount}");
+			return false;
+		}
+
+		if (_inventory.GetItemCount(InventoryItemType.G) + price < 0)
+		{
+			GD.PrintErr($"Cannot afford transaction. Current Gold: {_inventory.GetItemCount(InventoryItemType.G)}, Price: {price}");
+			return false;
+		}
+
 		_inventory.AddItem(item, amount);
 		if (price != 0)
 		{

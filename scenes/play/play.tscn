@@ -89,7 +89,7 @@ transform = Transform3D(1, 0, 0, 0, -0.53452927, 0.84514993, 0, -0.84514993, -0.
 shadow_enabled = true
 
 [node name="CollectionPoint" parent="." instance=ExtResource("6_ccytq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98428345, 0, 27.669376)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, -44.621307, 0, 27.669376)
 
 [node name="Collection Point" parent="." instance=ExtResource("6_ccytq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98428345, 0, -40.066883)

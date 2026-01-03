@@ -91,12 +91,13 @@ public partial class Player : CharacterBody3D, ICollector
 			{
 				CannonBall ball = _cannonBallScene.Instantiate<CannonBall>();
 
+				GetParent().AddChild(ball);
 				ball.GlobalPosition = CannonPivot.GlobalPosition;
 				ball.Launch(GlobalTransform.Basis.Z * -1, _currentSpeed, "josh");
 
 				_firedTimerCountdown = _fireCoolDownInSeconds;
 				EmitSignal(SignalName.CannonFired);
-				GetParent().AddChild(ball);
+
 			}
 		}
 	}

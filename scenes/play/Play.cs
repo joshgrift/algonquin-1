@@ -13,8 +13,6 @@ public partial class Play : Node3D
 
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Captured;
-
 		_playerSpawner.SpawnFunction = new Callable(this, MethodName.PlayerSpawnHandler);
 		_projectileSpawner.SpawnFunction = new Callable(this, MethodName.ProjectileSpawnHandler);
 

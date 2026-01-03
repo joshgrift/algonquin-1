@@ -9,7 +9,7 @@ public partial class ProjectilePartial : RigidBody3D
 {
   public string PlayerId { get; private set; }
 
-  [Export] public int Damage = 10;
+  [Export] public int Damage = 50;
 
   [Export] public int Speed = 40;
 

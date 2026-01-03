@@ -22,6 +22,7 @@ public partial class Play : Node3D
 		{
 			GD.Print($"Server ready");
 			Multiplayer.PeerConnected += OnPeerConnected;
+			Multiplayer.PeerDisconnected += OnPeerDisconnected;
 
 			// Activate free camera in server mode
 			if (Configuration.IsDesignatedServerMode() && _freeCam != null)
@@ -29,6 +30,19 @@ public partial class Play : Node3D
 				_freeCam.Current = true;
 				GD.Print("Free camera activated for server mode");
 			}
+		}
+	}
+
+	private void OnPeerDisconnected(long peerId)
+	{
+		GD.Print($"Peer {peerId} disconnected, cleaning up their player");
+
+		// Clean up the disconnected player's node
+		var playerNode = GetNodeOrNull<Player>($"SpawnPoint/player_{peerId}");
+		if (playerNode != null)
+		{
+			playerNode.QueueFree();
+			GD.Print($"Removed player_{peerId} due to disconnect");
 		}
 	}
 
@@ -71,22 +85,10 @@ public partial class Play : Node3D
 
 	private void HandleDeath(string playerName)
 	{
-		Rpc(MethodName.DespawnPlayer, playerName);
-		GD.Print($"{playerName} died, returning to menu");
+		Multiplayer.MultiplayerPeer.Close();
+
+		GD.Print("Disconnected from multiplayer, returning to menu");
 		GetTree().ChangeSceneToFile("res://scenes/menu/menu.tscn");
-	}
-
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	private void DespawnPlayer(string playerName)
-	{
-		if (!Multiplayer.IsServer()) return;
-
-		var playerNode = GetNodeOrNull<Player>($"SpawnPoint/{playerName}");
-		if (playerNode != null)
-		{
-			playerNode.CallDeferred(Player.MethodName.QueueFree);
-			GD.Print($"Despawned player {playerName}");
-		}
 	}
 
 	private async void OnPeerConnected(long peerId)

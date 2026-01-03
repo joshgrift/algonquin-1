@@ -21,6 +21,9 @@ public partial class NetworkManager : Node
       return;
     }
 
+    // Disconnect existing signal connections before connecting
+    Disconnect();
+
     Multiplayer.ConnectedToServer += OnConnectOk;
     Multiplayer.ConnectionFailed += OnConnectionFail;
 
@@ -38,11 +41,20 @@ public partial class NetworkManager : Node
       return;
     }
 
+    // Disconnect existing signal connections before connecting
+    Disconnect();
+
     Multiplayer.ConnectedToServer += OnConnectOk;
     Multiplayer.ConnectionFailed += OnConnectionFail;
 
     Multiplayer.MultiplayerPeer = peer;
     GD.Print($"Client connecting to {address}:{port}");
+  }
+
+  private void Disconnect()
+  {
+    Multiplayer.ConnectedToServer -= OnConnectOk;
+    Multiplayer.ConnectionFailed -= OnConnectionFail;
   }
 
   private void OnConnectOk()

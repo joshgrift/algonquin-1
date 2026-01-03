@@ -9,7 +9,7 @@ public partial class ProjectilePartial : RigidBody3D
 {
   public string PlayerId { get; private set; }
 
-  [Export] public int Damage = 10;
+  [Export] public int Damage = 100;
 
   [Export] public int Speed = 40;
 
@@ -23,6 +23,7 @@ public partial class ProjectilePartial : RigidBody3D
 
   public override void _Ready()
   {
+    BodyEntered += OnBodyEntered;
   }
 
   public void Launch(Vector3 direction, float launcherSpeed, string playerId)
@@ -44,6 +45,11 @@ public partial class ProjectilePartial : RigidBody3D
     {
       QueueFree();
     }
+  }
+
+  private void OnBodyEntered(Node body)
+  {
+    GD.Print($"Cannonball hit: {body.Name}");
   }
 }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dotnet build
+dotnet build || exit 1
 
 # ANSI color codes
 BLUE='\033[0;34m'

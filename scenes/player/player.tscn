@@ -11,11 +11,15 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:Health")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i3pqv"]
 size = Vector3(4.721039, 8.911621, 7.52652)
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CannonPivot")]
+collision_mask = 5
 script = ExtResource("1_onrkg")
 CannonPivot = NodePath("Cannon")
 

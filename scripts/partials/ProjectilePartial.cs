@@ -9,7 +9,7 @@ public partial class ProjectilePartial : RigidBody3D
 {
   public string PlayerId { get; private set; }
 
-  [Export] public int Damage = 100;
+  [Export] public int Damage = 10;
 
   [Export] public int Speed = 40;
 
@@ -23,7 +23,8 @@ public partial class ProjectilePartial : RigidBody3D
 
   public override void _Ready()
   {
-    BodyEntered += OnBodyEntered;
+    Area3D PlayerCollision = GetNode<Area3D>("PlayerCollision");
+    PlayerCollision.BodyEntered += OnBodyEntered;
   }
 
   public void Launch(Vector3 direction, float launcherSpeed, string playerId)
@@ -43,13 +44,19 @@ public partial class ProjectilePartial : RigidBody3D
     _timeAlive += (float)delta;
     if (_timeAlive >= TimeToLiveInSeconds)
     {
-      QueueFree();
+      CallDeferred(MethodName.QueueFree);
     }
   }
 
   private void OnBodyEntered(Node body)
   {
-    GD.Print($"Cannonball hit: {body.Name}");
+    if (!Multiplayer.IsServer()) return;
+
+    if (body is IDamageable)
+    {
+      body.Rpc(Player.MethodName.TakeDamage, Damage);
+      CallDeferred(MethodName.QueueFree);
+    }
   }
 }
 

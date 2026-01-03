@@ -1,47 +1,31 @@
 using Algonquin1;
 using Godot;
 
-public partial class Player : CharacterBody3D, ICollector
+public partial class Player : CharacterBody3D, ICollector, IDamageable
 {
-	[Signal]
-	public delegate void InventoryChangedEventHandler(InventoryItemType itemType, int newAmount);
+	[Signal] public delegate void InventoryChangedEventHandler(InventoryItemType itemType, int newAmount);
+	[Signal] public delegate void CannonFiredEventHandler();
+	[Signal] public delegate void CannonReadyToFireEventHandler();
+	[Signal] public delegate void DeathEventHandler(string playerName);
+	[Signal] public delegate void HealthUpdateEventHandler(int newHealth);
 
-	[Signal]
-	public delegate void CannonFiredEventHandler();
+	[Export] public float MaxSpeed { get; set; } = 14.0f;
+	[Export] public float Acceleration { get; set; } = 3.0f;
+	[Export] public float Deceleration { get; set; } = 1.5f;
+	[Export] public int FallAcceleration { get; set; } = 75;
+	[Export] public float TurnSpeed { get; set; } = 0.5f;
+	[Export] public float MinTurnSpeed { get; set; } = 2.0f;
 
-	[Signal]
-	public delegate void CannonReadyToFireEventHandler();
-
-	[Export]
-	public float MaxSpeed { get; set; } = 14.0f;
-
-	[Export]
-	public float Acceleration { get; set; } = 3.0f;
-
-	[Export]
-	public float Deceleration { get; set; } = 1.5f;
-
-	[Export]
-	public int FallAcceleration { get; set; } = 75;
-
-	[Export]
-	public float TurnSpeed { get; set; } = 0.5f;
-
-	[Export]
-	public float MinTurnSpeed { get; set; } = 2.0f;
+	[Export] public int Health { get; set; } = 100;
+	[Export] public int MaxHealth { get; set; } = 100;
 
 	[Export] public Node3D CannonPivot;
-
 	[Export] public MultiplayerSpawner ProjectileSpawner;
 
 	private float _currentSpeed = 0.0f;
-
 	private Vector3 _targetVelocity = Vector3.Zero;
-
 	private readonly Inventory _inventory = new();
-
 	private int _fireCoolDownInSeconds = 2;
-
 	private double _firedTimerCountdown = 0;
 
 	public override void _Ready()
@@ -99,7 +83,8 @@ public partial class Player : CharacterBody3D, ICollector
 		{
 			["position"] = CannonPivot.GlobalPosition,
 			["direction"] = GlobalTransform.Basis.Z * -1,
-			["speed"] = _currentSpeed
+			["speed"] = _currentSpeed,
+			["playerName"] = Name
 		};
 
 		Rpc(MethodName.RequestFireCannons, spawnData);
@@ -183,6 +168,29 @@ public partial class Player : CharacterBody3D, ICollector
 		// Moving the character
 		Velocity = _targetVelocity;
 		MoveAndSlide();
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	public void TakeDamage(int amount)
+	{
+		if (!IsMultiplayerAuthority()) return;
+
+		Health -= amount;
+		if (Health <= 0)
+		{
+			OnDeath();
+		}
+		else
+		{
+			EmitSignal(SignalName.HealthUpdate, Health);
+		}
+		GD.Print($"health = {Health}");
+	}
+
+	public void OnDeath()
+	{
+		GD.Print($"dead: {Name}");
+		EmitSignal(SignalName.Death, Name);
 	}
 
 	public bool Collect(InventoryItemType item, int amount)

@@ -47,10 +47,11 @@ public partial class Play : Node3D
 		Vector3 position = dict["position"].AsVector3();
 		Vector3 direction = dict["direction"].AsVector3();
 		float speed = dict["speed"].AsSingle();
+		string playerName = dict["playerName"].AsString();
 
 		var ball = _cannonBallScene.Instantiate<CannonBall>();
 		ball.Position = position;
-		ball.Launch(direction, speed, "player");
+		ball.Launch(direction, speed, playerName);
 		return ball;
 	}
 
@@ -58,8 +59,13 @@ public partial class Play : Node3D
 	{
 		var peerId = data.AsInt32();
 		var player = _playerScene.Instantiate<Player>();
-		player.Name = $"Player{peerId}";
+		player.Name = $"player_{peerId}";
 		player.Position = new Vector3(0, 2, 0);
+
+		player.Death += playerName =>
+		{
+			CallDeferred(MethodName.HandleDeath, playerName);
+		};
 
 		player.ProjectileSpawner = GetNode<MultiplayerSpawner>("Projectiles/ProjectileSpawner");
 
@@ -69,6 +75,26 @@ public partial class Play : Node3D
 		sync?.SetMultiplayerAuthority(peerId);
 
 		return player;
+	}
+
+	private void HandleDeath(string playerName)
+	{
+		Rpc(MethodName.DespawnPlayer, playerName);
+		GD.Print($"{playerName} died, returning to menu");
+		GetTree().ChangeSceneToFile("res://scenes/menu/menu.tscn");
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	private void DespawnPlayer(string playerName)
+	{
+		if (!Multiplayer.IsServer()) return;
+
+		var playerNode = GetNodeOrNull<Player>($"Players/{playerName}");
+		if (playerNode != null)
+		{
+			playerNode.CallDeferred(Player.MethodName.QueueFree);
+			GD.Print($"Despawned player {playerName}");
+		}
 	}
 
 	private void OnPeerConnected(long peerId)

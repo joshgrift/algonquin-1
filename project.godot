@@ -68,6 +68,12 @@ fire_cannons={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Players"
+3d_physics/layer_2="Projectiles"
+3d_physics/layer_3="Terrain"
+
 [rendering]
 
 renderer/rendering_method="mobile"

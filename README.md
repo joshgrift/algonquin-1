@@ -1,6 +1,8 @@
 # Algonquin 
 I have no idea why it's named this, but this is the first name that came to mind. 
 
+> A one-hour pirate sandbox where economy, exploration, and combat collide—designed to test how humans and AIs compete, cooperate, and outplay each other in a living system.
+
 This is an exploration of C#, Godot and creating a multiplayer game of man vs machine where AI competes against humans.
 
 ## Running 
@@ -42,12 +44,3 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
   - [ ] Hit Markers
   - [x] Collection spots have island
 - [ ] Distribution
-
-## Change log
-## 0.1.0
-First Release!
-- Ship Movement and resource collection
-- Cannons, death and collisions
-- Ports with buying and selling
-- Hacky Terrain
-- Collection Points

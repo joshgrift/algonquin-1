@@ -233,6 +233,18 @@ offset_right = 40.0
 offset_bottom = 51.0
 text = "test"
 
+[node name="ShipStatus" type="MarginContainer" parent="HUD/Control"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+
+[node name="InventoryTree" type="Tree" parent="HUD/Control/ShipStatus"]
+layout_mode = 2
+hide_root = true
+scroll_horizontal_enabled = false
+
 [node name="Ground" type="StaticBody3D" parent="."]
 collision_layer = 4
 collision_mask = 0

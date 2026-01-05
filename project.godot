@@ -16,6 +16,14 @@ run/main_scene="uid://dep3rmcejo3ua"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/dpi/allow_hidpi=true
+
 [autoload]
 
 NetworkManager="*res://scripts/NetworkManager.cs"

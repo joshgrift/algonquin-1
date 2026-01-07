@@ -234,6 +234,7 @@ offset_bottom = 51.0
 text = "test"
 
 [node name="ShipStatus" type="MarginContainer" parent="HUD/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0

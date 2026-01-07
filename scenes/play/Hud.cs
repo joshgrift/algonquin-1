@@ -154,7 +154,7 @@ public partial class Hud : CanvasLayer
 		else
 		{
 			TreeItem item = InventoryList.CreateItem(rootInventoryItem);
-			item.SetIcon(0, InventoryIcons.GetIcon(itemType));
+			item.SetIcon(0, Icons.GetInventoryIcon(itemType));
 			item.SetText(1, newAmount.ToString());
 			InventoryTreeReferences.Add(itemType, item);
 		}

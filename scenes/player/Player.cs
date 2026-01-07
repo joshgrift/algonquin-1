@@ -52,8 +52,8 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 			rng.Randf() * startXRange - startXRange / 2
 		);
 
-		CallDeferred(MethodName.UpdateInventory, (int)InventoryItemType.Ammo, 10);
-		CallDeferred(MethodName.UpdateInventory, (int)InventoryItemType.G, 10000);
+		CallDeferred(MethodName.UpdateInventory, (int)InventoryItemType.CannonBall, 10);
+		CallDeferred(MethodName.UpdateInventory, (int)InventoryItemType.Coin, 10000);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -83,14 +83,14 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 
 	private void FireCannons()
 	{
-		if (_inventory.GetItemCount(InventoryItemType.Ammo) <= 0)
+		if (_inventory.GetItemCount(InventoryItemType.CannonBall) <= 0)
 		{
 			GD.PrintErr($"{Name} tried to fire cannons but has no cannonballs!");
 			_firedTimerCountdown = 0.1f;
 			return;
 		}
 
-		UpdateInventory(InventoryItemType.Ammo, -1);
+		UpdateInventory(InventoryItemType.CannonBall, -1);
 
 		_firedTimerCountdown = _fireCoolDownInSeconds;
 		var spawnData = new Godot.Collections.Dictionary
@@ -214,17 +214,17 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 			return false;
 		}
 
-		if (_inventory.GetItemCount(InventoryItemType.G) + price < 0)
+		if (_inventory.GetItemCount(InventoryItemType.Coin) + price < 0)
 		{
-			GD.PrintErr($"Cannot afford transaction. Current Gold: {_inventory.GetItemCount(InventoryItemType.G)}, Price: {price}");
+			GD.PrintErr($"Cannot afford transaction. Current Gold: {_inventory.GetItemCount(InventoryItemType.Coin)}, Price: {price}");
 			return false;
 		}
 
 		_inventory.AddItem(item, amount);
 		if (price != 0)
 		{
-			_inventory.AddItem(InventoryItemType.G, price);
-			EmitSignal(SignalName.InventoryChanged, (int)InventoryItemType.G, _inventory.GetItemCount(InventoryItemType.G));
+			_inventory.AddItem(InventoryItemType.Coin, price);
+			EmitSignal(SignalName.InventoryChanged, (int)InventoryItemType.Coin, _inventory.GetItemCount(InventoryItemType.Coin));
 		}
 
 		EmitSignal(SignalName.InventoryChanged, (int)item, _inventory.GetItemCount(item));

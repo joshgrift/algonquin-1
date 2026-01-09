@@ -34,11 +34,17 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
   - [x] Shooting Cannonballs, health, and death.
   - [x] Limited Map with islands
   - [ ] Components
+    - [ ] Limit Cargo Size
+    - [ ] Increase Collection
+    - [ ] Limit number of components
+    - [ ] Allow multiple of the same component
+    - [ ] Auto Heal Mechanic
 - [ ] API for AI characters
   - [ ] Different ship design for AI character?
 - [ ] Graphics
   - [ ] Water
   - [x] Opaque collection spaces
   - [ ] Hit Markers
+  - [ ] Cannon shot graphics and shoot from side
   - [x] Collection spots have island
 - [ ] Distribution

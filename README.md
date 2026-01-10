@@ -39,12 +39,15 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
     - [ ] Limit number of components
     - [ ] Allow multiple of the same component
     - [ ] Auto Heal Mechanic
+  - [ ] Pickup dead player rewards
 - [ ] API for AI characters
   - [ ] Different ship design for AI character?
+- [ ] Leaderboards
 - [ ] Graphics
   - [ ] Water
   - [x] Opaque collection spaces
   - [ ] Hit Markers
   - [ ] Cannon shot graphics and shoot from side
   - [x] Collection spots have island
-- [ ] Distribution
+  - [ ] Proper Map graphics
+- [x] Distribution

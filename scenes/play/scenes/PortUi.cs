@@ -88,7 +88,12 @@ public partial class PortUi : PanelContainer
         item.SetText(1, itemData.BuyPrice.ToString());
         item.SetCellMode(2, TreeItem.TreeCellMode.Range);
         item.SetRange(2, 0);
-        item.SetRangeConfig(2, 0, 99, 1);
+
+        // Calculate max affordable quantity based on player's current money
+        int playerMoney = Player.GetInventoryCount(InventoryItemType.Coin);
+        int maxAffordable = playerMoney / itemData.BuyPrice;
+        item.SetRangeConfig(2, 0, maxAffordable, 1);
+
         item.SetEditable(2, true);
         item.SetText(3, "0");
       }

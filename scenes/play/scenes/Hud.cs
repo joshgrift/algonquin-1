@@ -147,7 +147,7 @@ public partial class Hud : Control
     var rootItem = LeaderboardTree.CreateItem();
 
     var players = PlayersContainer.GetChildren().OfType<Player>()
-        .OrderByDescending(p => p.GetInventoryCount(InventoryItemType.Trophy));
+      .OrderByDescending(p => p.GetInventoryCount(InventoryItemType.Trophy));
 
     foreach (var player in players)
     {

@@ -38,9 +38,9 @@ public partial class Port : Node3D, IIntractable
   public Variant GetPayload()
   {
     return new Dictionary
-        {
-            { "PortName", PortName },
-            { "ItemsForSale", ItemsForSale }
-        };
+    {
+      { "PortName", PortName },
+      { "ItemsForSale", ItemsForSale }
+    };
   }
 }

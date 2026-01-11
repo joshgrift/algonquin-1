@@ -87,9 +87,9 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     var rng = new RandomNumberGenerator();
     rng.Randomize();
     GlobalPosition = new Vector3(
-        rng.Randf() * startYRange - startYRange / 2,
-        GlobalPosition.Y,
-        rng.Randf() * startXRange - startXRange / 2
+      rng.Randf() * startYRange - startYRange / 2,
+      GlobalPosition.Y,
+      rng.Randf() * startXRange - startXRange / 2
     );
   }
 

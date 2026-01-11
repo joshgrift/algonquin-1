@@ -449,18 +449,18 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 46.48507, 5, -20.913643)
 [node name="Interactables" type="Node3D" parent="."]
 
 [node name="Collection Point" parent="Interactables" instance=ExtResource("6_ccytq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984, 1, -40.067)
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0.984, 1, -40.067)
 ResourceType = 1
 
 [node name="Collection Point2" parent="Interactables" instance=ExtResource("6_ccytq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.253654, 1, 115.4908)
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -102.253654, 1, 115.4908)
 ResourceType = 2
 
 [node name="CollectionPoint" parent="Interactables" instance=ExtResource("6_ccytq")]
-transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, -44.621, 1, 27.669)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.621, 1, 27.669)
 
 [node name="CollectionPoint2" parent="Interactables" instance=ExtResource("6_ccytq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -161.24391, 1, -57.88156)
+transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 0.25, -161.24391, 1, -57.88156)
 ResourceType = 3
 CollectionSpeed = 4.0
 

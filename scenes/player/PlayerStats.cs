@@ -25,7 +25,7 @@ public class PlayerStats
     Stats[PlayerStat.CollectionFish] = 1.0f;
     Stats[PlayerStat.CollectionWood] = 1.0f;
     Stats[PlayerStat.CollectionIron] = 1.0f;
-    Stats[PlayerStat.ShipCapacity] = 100.0f;
+    Stats[PlayerStat.ShipCapacity] = 1000.0f;
     Stats[PlayerStat.ComponentCapacity] = 4.0f;
 
     if (Configuration.IsCreative)

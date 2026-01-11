@@ -52,6 +52,9 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   private readonly Inventory _inventory = new();
   private int _fireCoolDownInSeconds = 2;
   private double _firedTimerCountdown = 0;
+  
+  // Ship banking/tilt when turning
+  private float _currentTurnInput = 0.0f;
 
   public override void _Ready()
   {
@@ -218,6 +221,9 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
       // Rotate the ship - simple and responsive
       RotateY(-turnInput * Stats.GetStat(PlayerStat.ShipTurnSpeed) * (float)delta);
     }
+    
+    // Store current turn input for banking effect (used in ApplyWaterPhysics)
+    _currentTurnInput = turnInput;
 
     // Move the ship in the direction it's facing
     // The pivot's forward direction is -Z in local space
@@ -520,10 +526,16 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     float heightDiff = heightBow - heightStern;
     float targetPitch = -Mathf.Atan2(heightDiff, ShipLength);
 
+    // Calculate roll (bank) based on turning
+    // When turning right (_currentTurnInput = 1), ship leans right (positive roll)
+    // When turning left (_currentTurnInput = -1), ship leans left (negative roll)
+    float maxRollAngle = Mathf.DegToRad(5.0f); // Maximum 5 degrees of roll
+    float targetRoll = _currentTurnInput * maxRollAngle;
+
     // Smoothly interpolate rotation
     Vector3 rotation = Rotation;
     rotation.X = Mathf.LerpAngle(rotation.X, targetPitch, delta * WaterSmoothSpeed);
-    rotation.Z = 0; // Keep roll at zero
+    rotation.Z = Mathf.LerpAngle(rotation.Z, targetRoll, delta * WaterSmoothSpeed * 0.3f); // Slow, subtle banking
     Rotation = rotation;
   }
 

@@ -1,0 +1,31 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://sj508xa6kulh"]
+
+[ext_resource type="FontFile" uid="uid://d4dryj8lmoxxs" path="res://art/fonts/Texturina/static/Texturina_60pt-Bold.ttf" id="1_110ce"]
+[ext_resource type="FontFile" uid="uid://1adc3v15g26n" path="res://art/fonts/New_Rocker/NewRocker-Regular.ttf" id="2_05tig"]
+[ext_resource type="FontFile" uid="uid://s3rjydua0alu" path="res://art/fonts/Texturina/static/Texturina_14pt-Medium.ttf" id="3_1rmny"]
+[ext_resource type="FontFile" uid="uid://crnruiruiuxiq" path="res://art/fonts/Texturina/static/Texturina_14pt-Bold.ttf" id="4_mihib"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_tiyfl"]
+color = Color(0.10934054, 0.109340556, 0.10934054, 1)
+
+[resource]
+Button/fonts/font = ExtResource("1_110ce")
+HUD_Header/base_type = &"Label"
+HUD_Header/font_sizes/font_size = 28
+HUD_Header/fonts/font = ExtResource("2_05tig")
+HUD_Header_small/base_type = &"Label"
+HUD_Header_small/font_sizes/font_size = 18
+HUD_Header_small/fonts/font = ExtResource("2_05tig")
+Label/fonts/font = ExtResource("1_110ce")
+LineEdit/font_sizes/font_size = 18
+LineEdit/fonts/font = ExtResource("1_110ce")
+MarginContainer/constants/margin_bottom = 0
+MarginContainer/constants/margin_left = 0
+MarginContainer/constants/margin_right = 0
+MarginContainer/constants/margin_top = 0
+TabContainer/fonts/font = ExtResource("1_110ce")
+TabContainer/styles/panel = SubResource("StyleBoxLine_tiyfl")
+TextEdit/fonts/font = ExtResource("1_110ce")
+Tree/colors/font_color = Color(1, 1, 1, 1)
+Tree/fonts/font = ExtResource("3_1rmny")
+Tree/fonts/title_button_font = ExtResource("4_mihib")

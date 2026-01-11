@@ -65,6 +65,7 @@ public partial class Play : Node3D
 	{
 		var peerId = data.AsInt32();
 		var player = _playerScene.Instantiate<Player>();
+		var identity = GetNode<Identity>("/root/Identity");
 		player.Name = $"player_{peerId}";
 		player.Position = new Vector3(0, 2, 0);
 
@@ -75,7 +76,6 @@ public partial class Play : Node3D
 
 		player.ProjectileSpawner = GetNode<MultiplayerSpawner>("Projectiles/ProjectileSpawner");
 
-		// Set authority in the spawn callback (this is the right time!)
 		player.SetMultiplayerAuthority(peerId);
 		var sync = player.GetNodeOrNull<MultiplayerSynchronizer>("MultiplayerSynchronizer");
 		sync?.SetMultiplayerAuthority(peerId);

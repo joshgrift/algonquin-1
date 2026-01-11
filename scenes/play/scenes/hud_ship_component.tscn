@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://1dj28qsrct6j" path="res://scenes/play/scenes/HudShipComponent.cs" id="1_2cey3"]
 [ext_resource type="Texture2D" uid="uid://devhh02yinryt" path="res://art/components/revenue_small.png" id="1_ntns2"]
-[ext_resource type="Theme" uid="uid://sj508xa6kulh" path="res://scenes/play/hud_theme.tres" id="3_101h8"]
+[ext_resource type="Theme" uid="uid://sj508xa6kulh" path="res://theme.tres" id="3_101h8"]
 
 [node name="ShipComponent" type="MarginContainer" node_paths=PackedStringArray("ComponentNameLabel", "ComponentDescriptionLabel", "ComponentIcon", "CostList", "Button")]
 offset_left = 328.0

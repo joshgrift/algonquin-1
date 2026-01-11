@@ -2,11 +2,19 @@ using System;
 using System.Linq;
 using Godot;
 
+public record ServerListingInfo
+{
+  public string ServerName;
+  public string IpAddress;
+  public int Port;
+}
+
 partial class Configuration : Node
 {
   public static bool RandomSpawnEnabled { get; } = false;
   public static int StartingCoin { get; } = 100;
   public static bool IsCreative { get; } = false;
+  public static int DefaultPort { get; } = 7777;
 
   public override void _Ready()
   {
@@ -30,5 +38,24 @@ partial class Configuration : Node
     var args = OS.GetCmdlineArgs();
 
     return args.Contains("--server") || OS.HasFeature("dedicated_server");
+  }
+
+  public static ServerListingInfo[] GetDefaultServerListings()
+  {
+    return
+    [
+      new ServerListingInfo
+      {
+        ServerName = "Localhost",
+        IpAddress = "127.0.0.1",
+        Port = DefaultPort
+      },
+      new ServerListingInfo
+      {
+        ServerName = "Sandbox",
+        IpAddress = "sandbox.servers.pirates.quest",
+        Port = DefaultPort
+      }
+    ];
   }
 }

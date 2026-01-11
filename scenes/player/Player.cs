@@ -29,6 +29,8 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 	public int Health { get; set; } = 100;
 	public int MaxHealth => (int)Stats.GetStat(PlayerStat.ShipHullStrength);
 
+	[Export] public string Nickname { get; set; }
+
 	[Export] public Node3D CannonPivot;
 	[Export] public MultiplayerSpawner ProjectileSpawner;
 
@@ -46,6 +48,13 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 		{
 			camera.Current = IsMultiplayerAuthority();
 			GD.Print($"{Name}: Camera enabled = {camera.Current}");
+		}
+
+		if (IsMultiplayerAuthority())
+		{
+			var identity = GetNode<Identity>("/root/Identity");
+			Nickname = identity.PlayerName;
+			GD.Print($"{Name} is local player with nickname {Nickname}");
 		}
 
 		if (Configuration.RandomSpawnEnabled)

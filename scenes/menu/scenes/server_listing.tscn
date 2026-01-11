@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0eux1h52brta"]
+
+[ext_resource type="Script" uid="uid://bdmjsop5t223m" path="res://scenes/menu/scenes/ServerListing.cs" id="1_tey66"]
+
+[node name="ServerListing" type="GridContainer"]
+size_flags_vertical = 3
+columns = 3
+script = ExtResource("1_tey66")
+
+[node name="ServerName" type="Label" parent="."]
+layout_mode = 2
+text = "SeverName"
+
+[node name="PlayerCountLabel" type="Label" parent="."]
+layout_mode = 2
+text = "(x/x)"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="JoinButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Join"

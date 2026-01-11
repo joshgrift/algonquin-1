@@ -29,20 +29,20 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
 ### 0.2.0 Alpha 
 - [x] Ship movement
 - [x] Multiplayer
-- [ ] Core Game Mechanics
+- [x] Core Game Mechanics
   - [x] Collection of resources
   - [x] Three resource types & store
   - [x] Shooting Cannonballs, health, and death.
   - [x] Limited Map with islands
-  - [ ] Components
+  - [x] Components
     - [x] Can add to ship
     - [x] Can buy in Port
     - [x] Limit number of components
     - [x] Allow multiple of the same component
     - [x] Limit Cargo Size
-    - [ ] Increase Collection
+    - [x] Increase Collection
     - [x] Auto Heal Mechanic
-  - [ ] Pickup dead player rewards
+  - [x] Pickup dead player rewards
 - [ ] Quests to get skulls
 - [ ] Leaderboards
 - [ ] Graphics

@@ -33,6 +33,7 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 
 	[Export] public Node3D CannonPivot;
 	[Export] public MultiplayerSpawner ProjectileSpawner;
+	[Export] public MultiplayerSpawner DeadPlayerSpawner;
 	[Export] public Timer AutoHealTimer;
 
 	private float _currentSpeed = 0.0f;
@@ -232,7 +233,21 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 	public void OnDeath()
 	{
 		GD.Print($"dead: {Name}");
+		Rpc(MethodName.ServerDeath, new Dictionary
+		{
+			["peerId"] = Multiplayer.GetUniqueId(),
+			["nickname"] = Nickname,
+			["position"] = GlobalPosition,
+			["items"] = _inventory.GetAll()
+		});
 		EmitSignal(SignalName.Death, Name);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	public void ServerDeath(Variant spawnData)
+	{
+		if (!Multiplayer.IsServer()) return;
+		DeadPlayerSpawner.Spawn(spawnData);
 	}
 
 	private void OnAutoHealTimeout()
@@ -371,6 +386,18 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 				break;
 		}
 		return UpdateInventory(item, Mathf.RoundToInt(total));
+	}
+
+	public bool BulkCollect(Dictionary<InventoryItemType, int> items)
+	{
+		foreach (var item in items)
+		{
+			if (!UpdateInventory(item.Key, item.Value))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public bool UpdateInventory(InventoryItemType item, int amount)

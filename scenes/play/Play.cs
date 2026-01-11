@@ -1,22 +1,27 @@
 namespace PiratesQuest;
 
+using System;
 using Godot;
+using PiratesQuest.Data;
 
 public partial class Play : Node3D
 {
 	[Export] private MultiplayerSpawner _playerSpawner;
 	[Export] private MultiplayerSpawner _projectileSpawner;
+	[Export] private MultiplayerSpawner _deadPlayerSpawner;
 	[Export] private Node3D playerContainer;
 	[Export] private FreeCam _freeCam;
 	[Export] private Hud hud;
 
 	private PackedScene _playerScene = GD.Load<PackedScene>("res://scenes/player/player.tscn");
 	private PackedScene _cannonBallScene = GD.Load<PackedScene>("res://scenes/cannon_ball/cannon_ball.tscn");
+	private PackedScene _deadPlayerScene = GD.Load<PackedScene>("res://scenes/dead_player/dead_player.tscn");
 
 	public override void _Ready()
 	{
 		_playerSpawner.SpawnFunction = new Callable(this, MethodName.PlayerSpawnHandler);
 		_projectileSpawner.SpawnFunction = new Callable(this, MethodName.ProjectileSpawnHandler);
+		_deadPlayerSpawner.SpawnFunction = new Callable(this, MethodName.DeadPlayerSpawnHandler);
 
 		if (Multiplayer.IsServer())
 		{
@@ -61,6 +66,20 @@ public partial class Play : Node3D
 		return ball;
 	}
 
+	private DeadPlayer DeadPlayerSpawnHandler(Variant data)
+	{
+
+		var dict = data.AsGodotDictionary();
+
+		GD.Print($"Spawning DeadPlayer for {dict["nickname"].AsString()}");
+
+		var deadPlayer = _deadPlayerScene.Instantiate<DeadPlayer>();
+		deadPlayer.Position = dict["position"].AsVector3();
+		deadPlayer.DroppedItems = dict["items"].AsGodotDictionary<InventoryItemType, int>();
+
+		return deadPlayer;
+	}
+
 	private Player PlayerSpawnHandler(Variant data)
 	{
 		var peerId = data.AsInt32();
@@ -75,6 +94,7 @@ public partial class Play : Node3D
 		};
 
 		player.ProjectileSpawner = GetNode<MultiplayerSpawner>("Projectiles/ProjectileSpawner");
+		player.DeadPlayerSpawner = _deadPlayerSpawner;
 
 		player.SetMultiplayerAuthority(peerId);
 		var sync = player.GetNodeOrNull<MultiplayerSynchronizer>("MultiplayerSynchronizer");

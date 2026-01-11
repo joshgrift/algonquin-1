@@ -20,12 +20,8 @@ if [[ "$1" != "--server" ]]; then
   /Applications/Godot_mono.app/Contents/MacOS/Godot --path . --resolution 2400x1000 --position 0,50 --client1 2>&1 | sed "s/^/$(echo -e ${GREEN})[Client 1 ]$(echo -e ${RESET}) /" &
   PID2=$!
 
-  echo -e "${BLUE}=== Starting Client 2 ===${RESET}"
-  /Applications/Godot_mono.app/Contents/MacOS/Godot --path . --resolution 2400x1000 --position 0,1250 --client2 2>&1 | sed "s/^/$(echo -e ${BLUE})[Client 2]$(echo -e ${RESET}) /" &
-  PID3=$!
-
   # Wait for all instances to complete
-  wait $PID1 $PID2 $PID3
+  wait $PID1 $PID2
 else
   # Wait for server only
   wait $PID1

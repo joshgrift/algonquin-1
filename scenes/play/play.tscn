@@ -50,10 +50,11 @@ BuyPrice = 2
 SellPrice = 1
 metadata/_custom_type_script = "uid://b81r8qngpan6y"
 
-[node name="Play" type="Node3D" node_paths=PackedStringArray("_playerSpawner", "_projectileSpawner", "_freeCam", "hud")]
+[node name="Play" type="Node3D" node_paths=PackedStringArray("_playerSpawner", "_projectileSpawner", "_deadPlayerSpawner", "_freeCam", "hud")]
 script = ExtResource("1_j5m8q")
 _playerSpawner = NodePath("SpawnPoint/MultiplayerSpawner")
 _projectileSpawner = NodePath("Projectiles/ProjectileSpawner")
+_deadPlayerSpawner = NodePath("DeadPlayerSpawner")
 _freeCam = NodePath("ServerFreeCam")
 hud = NodePath("HUD/HUD")
 
@@ -70,7 +71,7 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554657, 0.09586334, -0.055252075)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.055, -1, -0.055)
 material_override = SubResource("StandardMaterial3D_1bvp3")
 mesh = SubResource("BoxMesh_ig7tw")
 
@@ -436,3 +437,8 @@ ItemsForSale = Array[Object]([SubResource("Resource_a0nu5"), SubResource("Resour
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -111.896355, 1, -103.57585)
 PortName = "Haven"
 ItemsForSale = Array[Object]([SubResource("Resource_gcg6u"), SubResource("Resource_mric1")])
+
+[node name="DeadPlayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../DeadPlayers")
+
+[node name="DeadPlayers" type="Node3D" parent="."]

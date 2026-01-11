@@ -43,7 +43,7 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   [Export] public float WaveHeight { get; set; } = 3.0f;
   [Export] public float WaveSpeed { get; set; } = 0.05f;
   [Export] public float WaterNoiseScale { get; set; } = 0.002f;
-  [Export] public float ShipLength { get; set; } = 5.0f;
+  [Export] public float ShipLength { get; set; } = 10.0f;
   [Export] public float VerticalOffset { get; set; } = -0.2f;
   [Export] public float WaterSmoothSpeed { get; set; } = 8.0f;
 

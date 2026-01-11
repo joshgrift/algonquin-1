@@ -1,6 +1,7 @@
 namespace PiratesQuest;
 
 using System.Linq;
+using Godot;
 using Godot.Collections;
 using PiratesQuest.Data;
 
@@ -33,6 +34,11 @@ public partial class Inventory
     }
 
     return false;
+  }
+
+  public void SetItem(InventoryItemType itemType, int count)
+  {
+    _items[itemType] = count;
   }
 
   public Dictionary<InventoryItemType, int> GetAll()

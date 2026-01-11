@@ -149,14 +149,14 @@ public partial class Hud : Control
     var players = PlayersContainer.GetChildren().OfType<Player>()
       .OrderByDescending(p => p.GetInventoryCount(InventoryItemType.Trophy));
 
-    foreach (var player in players)
+    foreach (var leaderboardPlayer in players)
     {
-      if (player.Nickname == "" || player.Nickname == null)
+      if (leaderboardPlayer.Nickname == "" || leaderboardPlayer.Nickname == null)
         continue;
       var item = LeaderboardTree.CreateItem(rootItem);
-      item.SetText(0, player.GetInventoryCount(InventoryItemType.Trophy).ToString());
+      item.SetText(0, leaderboardPlayer.TrophyCount.ToString());
       item.SetIcon(0, Icons.GetInventoryIcon(InventoryItemType.Trophy));
-      item.SetText(1, player.Nickname);
+      item.SetText(1, leaderboardPlayer.Nickname);
     }
 
     GetTree().CreateTimer(5.0f).Timeout += UpdateLeaderboard;

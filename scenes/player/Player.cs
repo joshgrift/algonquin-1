@@ -55,6 +55,13 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   [Export] public float VerticalOffset { get; set; } = -0.2f;
   [Export] public float WaterSmoothSpeed { get; set; } = 8.0f;
 
+  [Export]
+  public int TrophyCount
+  {
+    get => _inventory.GetItemCount(InventoryItemType.Trophy);
+    set => _inventory.SetItem(InventoryItemType.Trophy, value);
+  }
+
   private float _currentSpeed = 0.0f;
   private Vector3 _targetVelocity = Vector3.Zero;
   private readonly Inventory _inventory = new();

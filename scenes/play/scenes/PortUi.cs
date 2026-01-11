@@ -233,6 +233,7 @@ public partial class PortUi : PanelContainer
     foreach (var component in components)
     {
       var componentUi = _componentScene.Instantiate<HudShipComponent>();
+      componentUi.Player = Player;
       componentUi.SetComponent(component, status);
       componentUi.ButtonClicked += () =>
       {

@@ -22,6 +22,8 @@ public partial class HudShipComponent : MarginContainer
   [Export] public HBoxContainer CostList;
   [Export] public Button Button;
 
+  public Player Player;
+
   public override void _Ready()
   {
     Button.Pressed += OnButtonPressed;
@@ -74,8 +76,14 @@ public partial class HudShipComponent : MarginContainer
         costItem.AddChild(iconRect);
 
         // Add cost label
-        Label costLabel = new Label();
+        Label costLabel = new();
         costLabel.Text = costEntry.Value.ToString();
+
+        if (Player != null && Player.GetInventoryCount(costEntry.Key) < costEntry.Value)
+        {
+          costLabel.AddThemeColorOverride("font_color", new Color(0.8f, 0.2f, 0.2f));
+        }
+
         costItem.AddChild(costLabel);
 
         CostList.AddChild(costItem);

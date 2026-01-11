@@ -16,6 +16,7 @@ HUD_Header/fonts/font = ExtResource("2_05tig")
 HUD_Header_small/base_type = &"Label"
 HUD_Header_small/font_sizes/font_size = 18
 HUD_Header_small/fonts/font = ExtResource("2_05tig")
+Label/colors/font_color = Color(1, 1, 1, 1)
 Label/fonts/font = ExtResource("1_110ce")
 LineEdit/font_sizes/font_size = 18
 LineEdit/fonts/font = ExtResource("1_110ce")

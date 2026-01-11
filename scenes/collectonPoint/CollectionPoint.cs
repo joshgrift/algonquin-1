@@ -9,6 +9,7 @@ public partial class CollectionPoint : Node3D, IDropper
 
 	[Export] public InventoryItemType ResourceType = InventoryItemType.Wood;
 	[Export] public int CollectionPerSecond = 4;
+	[Export] public float CollectionSpeed = 2.0f;
 
 	public override void _Ready()
 	{
@@ -18,7 +19,7 @@ public partial class CollectionPoint : Node3D, IDropper
 
 		Timer collectionTimer = GetNode<Timer>("CollectionTimer");
 		collectionTimer.Timeout += OnCollectionTimeout;
-		collectionTimer.WaitTime = 2.0f;
+		collectionTimer.WaitTime = CollectionSpeed;
 		collectionTimer.Start();
 	}
 

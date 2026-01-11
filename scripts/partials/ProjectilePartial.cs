@@ -11,9 +11,9 @@ public partial class ProjectilePartial : RigidBody3D
 {
   public string PlayerId { get; private set; }
 
-  [Export] public int Damage = 50;
+  [Export] public int Damage = 0;
 
-  [Export] public int Speed = 40;
+  [Export] public int Speed = 10;
 
   [Export] public int TimeToLiveInSeconds = 5;
 
@@ -29,12 +29,13 @@ public partial class ProjectilePartial : RigidBody3D
     PlayerCollision.BodyEntered += OnBodyEntered;
   }
 
-  public void Launch(Vector3 direction, float launcherSpeed, string playerId)
+  public void Launch(Vector3 direction, float launcherSpeed, string playerId, int damage)
   {
     PlayerId = playerId;
     direction.Y = 0;
     _targetVelocity = direction.Normalized();
     _currentSpeed = Speed + launcherSpeed;
+    Damage = damage;
 
     _targetVelocity.X *= _currentSpeed;
     _targetVelocity.Z *= _currentSpeed;

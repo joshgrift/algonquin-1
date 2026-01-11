@@ -31,7 +31,7 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   public System.Collections.Generic.List<OwnedComponent> OwnedComponents = [];
 
   public int FallAcceleration { get; set; } = 75;
-  public int Health { get; set; } = 80;
+  public int Health { get; set; } = 100;
   public int MaxHealth => (int)Stats.GetStat(PlayerStat.ShipHullStrength);
 
   [Export] public string Nickname { get; set; }
@@ -66,6 +66,8 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 
   public override void _Ready()
   {
+    Health = MaxHealth;
+
     // Only enable the camera for the player we control
     var camera = GetNodeOrNull<Camera3D>("CameraPivot/Camera3D");
     if (camera != null)
@@ -189,13 +191,13 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     // Create spawn data for the cannonball
     var spawnData = new Godot.Collections.Dictionary
     {
-      ["position"] = cannonPivot.GlobalPosition,  // Spawn at the selected cannon position
-      ["direction"] = fireDirection,  // Fire perpendicular to the ship
-      ["speed"] = _currentSpeed,  // Include the ship's current speed
-      ["playerName"] = Name  // Track which player fired the cannonball
+      ["position"] = cannonPivot.GlobalPosition,
+      ["direction"] = fireDirection,
+      ["speed"] = _currentSpeed + Stats.GetStat(PlayerStat.AttackRange),
+      ["playerName"] = Name,
+      ["damage"] = Stats.GetStat(PlayerStat.AttackDamage)
     };
 
-    // Request the server to spawn the cannonball (works in multiplayer)
     Rpc(MethodName.RequestFireCannons, spawnData);
 
     if (_cannonSoundPlayer != null && _cannonSoundPlayer.Stream != null)

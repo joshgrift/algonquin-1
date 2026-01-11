@@ -58,11 +58,12 @@ public partial class Play : Node3D
     Vector3 position = dict["position"].AsVector3();
     Vector3 direction = dict["direction"].AsVector3();
     float speed = dict["speed"].AsSingle();
+    int damage = dict["damage"].AsInt32();
     string playerName = dict["playerName"].AsString();
 
     var ball = _cannonBallScene.Instantiate<CannonBall>();
     ball.Position = position;
-    ball.Launch(direction, speed, playerName);
+    ball.Launch(direction, speed, playerName, damage);
     return ball;
   }
 

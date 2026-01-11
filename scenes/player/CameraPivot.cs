@@ -133,7 +133,6 @@ public partial class CameraPivot : Marker3D
     // Only rotate the camera when dragging
     if (@event is InputEventMouseMotion mouseMotion && _isDragging)
     {
-      GD.Print($"[CameraPivot] MouseMotion: {mouseMotion.Relative}, Dragging: {_isDragging}");
       // Horizontal rotation (yaw) - rotate around Y axis
       _cameraTargetAngleY -= mouseMotion.Relative.X * MouseSensitivity;
 

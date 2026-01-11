@@ -40,12 +40,12 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   [ExportGroup("Water Physics")]
   [Export] public FastNoiseLite WaterNoiseResource { get; set; }
   [Export] public MeshInstance3D WaterPlane { get; set; }
-  [Export] public float WaveHeight { get; set; } = 1.0f;
+  [Export] public float WaveHeight { get; set; } = 3.0f;
   [Export] public float WaveSpeed { get; set; } = 0.05f;
   [Export] public float WaterNoiseScale { get; set; } = 0.002f;
   [Export] public float ShipLength { get; set; } = 5.0f;
   [Export] public float VerticalOffset { get; set; } = -0.2f;
-  [Export] public float WaterSmoothSpeed { get; set; } = 5.0f;
+  [Export] public float WaterSmoothSpeed { get; set; } = 8.0f;
 
   private float _currentSpeed = 0.0f;
   private Vector3 _targetVelocity = Vector3.Zero;

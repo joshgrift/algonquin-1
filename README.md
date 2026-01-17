@@ -32,7 +32,7 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
 ## TODO before tests
 ### 0.3.0 Alpha
 - [ ] Bugs & Improvements
-  - [ ] Backing up controls feel weird
+  - [x] Backing up controls feel weird
   - [ ] camera can go upside down
   - [ ] Auto equip components when you buy them
   - [ ] Stop player from shooting when dead

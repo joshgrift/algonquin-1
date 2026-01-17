@@ -62,7 +62,11 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     set => _inventory.SetItem(InventoryItemType.Trophy, value);
   }
 
-  private float _currentSpeed = 0.0f;
+  // Simple movement state
+  private float _currentSpeed = 0.0f;       // Current forward/backward speed
+  private float _lastSpeed = 0.0f;          // Speed in previous frame
+  private float _accelerationPitch = 0.0f;  // Extra pitch from speeding up / slowing down
+
   private Vector3 _targetVelocity = Vector3.Zero;
   private readonly Inventory _inventory = new();
   private int _fireCoolDownInSeconds = 2;
@@ -263,15 +267,57 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
       _currentSpeed = Mathf.MoveToward(_currentSpeed, 0.0f, Stats.GetStat(PlayerStat.ShipDeceleration) * (float)delta);
     }
 
-    // Allow turning with responsive controls (no speed requirement)
-    if (turnInput != 0.0f)
+    // --- Simple acceleration-based pitch (nose up/down) --------------------
+    // How much our speed changed this frame.
+    float speedDelta = _currentSpeed - _lastSpeed;
+    _lastSpeed = _currentSpeed;
+
+    // Map change in speed to a small pitch offset in radians.
+    // Empirically tuned for this ship:
+    //   - slowing down (speedDelta < 0)  => lean FORWARD
+    //   - speeding up  (speedDelta > 0)  => lean BACK
+    float targetAccelPitch = Mathf.Clamp(
+      speedDelta * 0.4f,
+      Mathf.DegToRad(-8.0f),
+      Mathf.DegToRad(8.0f)
+    );
+
+    // Smooth so it doesn't snap every frame.
+    _accelerationPitch = Mathf.Lerp(
+      _accelerationPitch,
+      targetAccelPitch,
+      delta * 10.0f
+    );
+
+    // --- Turning (left/right) ------------------------------------------------
+    // By default, turning is based directly on the left/right input.
+    float effectiveTurnInput = turnInput;
+
+    // When backing up, players usually expect steering to flip:
+    //   - Pressing "left" while REVERSING should turn the ship visually left,
+    //     relative to the direction of movement (like a car in reverse).
+    // IMPORTANT: we only want this when the ship is actually MOVING backwards,
+    // not just when the player taps the "move_back" key to slow down.
+    //
+    // _currentSpeed is our scalar "forward speed" along the ship's facing:
+    //   - _currentSpeed > 0  => moving forward
+    //   - _currentSpeed < 0  => moving backward
+    if (_currentSpeed < 0.0f)
     {
-      // Rotate the ship - simple and responsive
-      RotateY(-turnInput * Stats.GetStat(PlayerStat.ShipTurnSpeed) * (float)delta);
+      // Flip steering only while truly reversing.
+      effectiveTurnInput = -effectiveTurnInput;
     }
 
-    // Store current turn input for banking effect (used in ApplyWaterPhysics)
-    _currentTurnInput = turnInput;
+    if (effectiveTurnInput != 0.0f)
+    {
+      // Rotate the ship. Negative sign keeps "move_right" turning the ship
+      // to the right when moving forward.
+      RotateY(-effectiveTurnInput * Stats.GetStat(PlayerStat.ShipTurnSpeed) * (float)delta);
+    }
+
+    // Store current turn input (after inversion) for banking effect
+    // used in ApplyWaterPhysics.
+    _currentTurnInput = effectiveTurnInput;
 
     // Move the ship in the direction it's facing
     // The pivot's forward direction is -Z in local space
@@ -576,13 +622,17 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     float heightDiff = heightBow - heightStern;
     float targetPitch = -Mathf.Atan2(heightDiff, ShipLength);
 
+    // Add extra pitch from acceleration / braking so the ship leans
+    // slightly forward/backward when its speed changes aggressively.
+    float combinedTargetPitch = targetPitch + _accelerationPitch;
+
     // Calculate roll (bank) based on turning and add recoil rocking
     float maxRollAngle = Mathf.DegToRad(5.0f); // Maximum 5 degrees of roll
     float targetRoll = _currentTurnInput * maxRollAngle + _recoilRoll;
 
     // Smoothly interpolate rotation
     Vector3 rotation = Rotation;
-    rotation.X = Mathf.LerpAngle(rotation.X, targetPitch, delta * WaterSmoothSpeed);
+    rotation.X = Mathf.LerpAngle(rotation.X, combinedTargetPitch, delta * WaterSmoothSpeed);
     rotation.Z = Mathf.LerpAngle(rotation.Z, targetRoll, delta * WaterSmoothSpeed * 0.3f); // Slow, subtle banking
     Rotation = rotation;
 

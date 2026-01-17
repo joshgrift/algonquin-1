@@ -24,7 +24,7 @@ properties/2/replication_mode = 1
 
 [node name="cannon_ball" type="RigidBody3D"]
 collision_layer = 2
-collision_mask = 0
+collision_mask = 6
 script = ExtResource("1_nvjdn")
 
 [node name="TerrainCollisionShape" type="CollisionShape3D" parent="."]

@@ -47,7 +47,7 @@
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 7
 
 [node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -19.316723, 0, -18.302841)

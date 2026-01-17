@@ -31,6 +31,8 @@ public partial class PortUi : PanelContainer
 
   private PackedScene _componentScene = GD.Load<PackedScene>("res://scenes/play/scenes/hud_ship_component.tscn");
 
+  private ShopItemData[] _currentItemsForSale;
+
   public override void _Ready()
   {
     // Buy
@@ -70,8 +72,14 @@ public partial class PortUi : PanelContainer
     GetNode<Label>("MarginContainer/Port/PortName").Text = name;
   }
 
+  /// <summary>
+  /// Sets up the buy/sell UI with the given items for sale.
+  /// Stores the items so we can refresh after transactions.
+  /// </summary>
   public void SetStock(ShopItemData[] itemsForSale)
   {
+    _currentItemsForSale = itemsForSale;
+
     _buyListRoot.CallRecursive("free");
     _buyListRoot = BuyListTree.CreateItem();
 
@@ -139,6 +147,10 @@ public partial class PortUi : PanelContainer
     TotalBuyLabel.Text = $"Total: {buyTotal}";
   }
 
+  /// <summary>
+  /// Called when the player clicks the Buy button.
+  /// Purchases all selected items and refreshes the UI to update max quantities.
+  /// </summary>
   public void OnBuyButtonPressed()
   {
     foreach (TreeItem item in _buyListRoot.GetChildren())
@@ -153,6 +165,7 @@ public partial class PortUi : PanelContainer
     }
 
     TotalBuyLabel.Text = $"Total: 0";
+    RefreshPortUi();
   }
 
   public void OnSellItemEdited()
@@ -193,6 +206,17 @@ public partial class PortUi : PanelContainer
     }
 
     TotalSellLabel.Text = $"Total: 0";
+    RefreshPortUi();
+  }
+
+  private void RefreshPortUi()
+  {
+    // Only refresh if we have stored items (i.e., SetStock was called)
+    if (_currentItemsForSale != null)
+    {
+      SetStock(_currentItemsForSale);
+    }
+    UpdateShipMenu();
   }
 
   public void UpdateShipMenu()
@@ -250,7 +274,7 @@ public partial class PortUi : PanelContainer
             break;
         }
 
-        UpdateShipMenu();
+        RefreshPortUi();
       };
       control.AddChild(componentUi);
     }

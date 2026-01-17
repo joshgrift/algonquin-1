@@ -34,14 +34,14 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
 - [ ] Bugs & Improvements
   - [x] Backing up controls feel weird
   - [x] camera can go upside down
-  - [ ] Auto equip components when you buy them
+  - [x] Auto equip components when you buy them
   - [x] Cannon ball goes too far
   - [x] Need the ability to shoot, move, and turn at the same time
   - [ ] Collection points are too hard to see
   - [x] Improve turn radius
   - [ ] UI to show you collecting items
-  - [ ] Reset Port UI when you buy
-  - [ ] Status Tool Tip
+  - [x] Reset Port UI when you buy
+  - [x] Status Tool Tip
 - [ ] A way to heal
 - [x] Hit Markers
 - [x] Limit Player name characters
@@ -50,13 +50,14 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
   - [ ] Stop player from shooting when dead
   - [ ] Respawn player automatically after 5 seconds instead of back to menu
 - [x] Broadcast sound across all players
-- [ ] Fix cannonball collision
+- [x] Fix cannonball collision
 
 ### Later
 - [ ] Quests
 - [ ] Ship Upgrades
 - [ ] API for AI characters
 - [ ] Island mesh?
+   - [ ] Better island cannonball collision
 - [ ] Fix water.
 
 ### Suggestions

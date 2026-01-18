@@ -22,12 +22,17 @@ public partial class DeadPlayer : Area3D
   {
     if (body is ICanCollect collector)
     {
-      if (collector.Name != PlayerName)
+      // Check if collector is allowed to collect right now
+      // (e.g., Player returns false when dead, true when alive)
+      if (!collector.CanCollect)
       {
-        collector.BulkCollect(DroppedItems);
-        GD.Print($"{collector.Name} collected items from {PlayerName} (${Nickname})'s dead player.");
-        QueueFree();
+        GD.Print($"{collector.Name} cannot collect items right now.");
+        return;
       }
+
+      collector.BulkCollect(DroppedItems);
+      GD.Print($"{collector.Name} collected items from {PlayerName} ({Nickname})'s dead player.");
+      QueueFree();
     }
   }
 }

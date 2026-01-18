@@ -28,6 +28,9 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath(".:TrophyCount")
 properties/5/spawn = true
 properties/5/replication_mode = 1
+properties/6/path = NodePath(".:State")
+properties/6/spawn = true
+properties/6/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CannonPivotLeft", "CannonPivotRight", "AutoHealTimer", "_cannonSoundPlayer")]
 collision_mask = 5

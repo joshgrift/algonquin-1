@@ -41,7 +41,10 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   public System.Collections.Generic.List<OwnedComponent> OwnedComponents = [];
 
   // Current state of the player - controls whether they can move, shoot, or take damage
-  public PlayerState State { get; private set; } = PlayerState.Alive;
+  [Export] public PlayerState State { get; private set; } = PlayerState.Alive;
+
+  // ICanCollect.CanCollect - player can only collect items when alive
+  public bool CanCollect => State == PlayerState.Alive;
 
   public int FallAcceleration { get; set; } = 75;
   public int Health { get; set; } = 100;
@@ -489,8 +492,25 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
   {
     if (!IsMultiplayerAuthority()) return;
 
-    // Set state back to Alive - this re-enables movement, shooting, and taking damage
-    State = PlayerState.Alive;
+    // Top up cannonballs and coins to starting defaults if below
+    // This ensures respawned players always have minimum resources to play
+    int currentCannonballs = _inventory.GetItemCount(InventoryItemType.CannonBall);
+    int currentCoins = _inventory.GetItemCount(InventoryItemType.Coin);
+
+    const int defaultCannonballs = 10;
+    int defaultCoins = Configuration.StartingCoin;
+
+    if (currentCannonballs < defaultCannonballs)
+    {
+      int topUp = defaultCannonballs - currentCannonballs;
+      UpdateInventory(InventoryItemType.CannonBall, topUp);
+    }
+
+    if (currentCoins < defaultCoins)
+    {
+      int topUp = defaultCoins - currentCoins;
+      UpdateInventory(InventoryItemType.Coin, topUp);
+    }
 
     // Reset health to maximum
     Health = MaxHealth;
@@ -498,6 +518,11 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 
     // Move to a new random spawn position
     RandomSpawn(100, 100);
+
+    // Delay setting state to Alive by a short time (0.2 seconds)
+    // This gives physics time to process the position change
+    // and prevents picking up our own dropped items at the death location
+    GetTree().CreateTimer(1.0f).Timeout += () => State = PlayerState.Alive;
 
     GD.Print($"{Name} has respawned with {Health} health");
   }

@@ -31,7 +31,7 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
 
 ## TODO before tests
 ### 0.3.0 Alpha
-- [ ] Bugs & Improvements
+- [x] Bugs & Improvements
   - [x] Backing up controls feel weird
   - [x] camera can go upside down
   - [x] Auto equip components when you buy them
@@ -42,15 +42,16 @@ Please submit a PR, learning godot, so any and all suggestions welcome.
   - [x] UI to show you collecting items
   - [x] Reset Port UI when you buy
   - [x] Status Tool Tip
-- [ ] A way to heal
+- [x] A way to heal
 - [x] Hit Markers
 - [x] Limit Player name characters
-- [ ] Death & Respawn
-  - [ ] Make death less punishing somehow
-  - [ ] Stop player from shooting when dead
-  - [ ] Respawn player automatically after 5 seconds instead of back to menu
+- [x] Death & Respawn
+  - [x] Make death less punishing somehow
+  - [x] Stop player from shooting when dead
+  - [x] Respawn player automatically after 5 seconds instead of back to menu
 - [x] Broadcast sound across all players
 - [x] Fix cannonball collision
+- [x] Island fix
 
 ### Later
 - [ ] Quests

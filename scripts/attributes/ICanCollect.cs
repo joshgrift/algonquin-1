@@ -12,4 +12,10 @@ public interface ICanCollect
   bool CollectResource(InventoryItemType item, int amount);
   bool BulkCollect(Dictionary<InventoryItemType, int> items);
   public StringName Name { get; set; }
+
+  /// <summary>
+  /// Whether this object can currently collect items.
+  /// For example, a Player returns false when dead, true when alive.
+  /// </summary>
+  bool CanCollect { get; }
 }

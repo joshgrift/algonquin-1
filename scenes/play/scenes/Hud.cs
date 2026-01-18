@@ -3,6 +3,7 @@ using PiratesQuest;
 using System.Linq;
 using PiratesQuest.Data;
 using Godot.Collections;
+using System.Collections.Generic;
 
 public partial class Hud : Control
 {
@@ -17,8 +18,14 @@ public partial class Hud : Control
   private Player _player;
   private int _retryCount = 0;
   private const int MaxRetries = 30;
-  private Dictionary<InventoryItemType, TreeItem> InventoryTreeReferences = [];
+  // Using Godot Dictionary for tree references (needed for Godot interop)
+  private Godot.Collections.Dictionary<InventoryItemType, TreeItem> InventoryTreeReferences = [];
   private TreeItem rootInventoryItem = null;
+
+  // Track pending changes for each item type to handle rapid inventory updates
+  // Key: item type, Value: tuple of (accumulated change, timer reference)
+  // Using System.Collections.Generic.Dictionary because Godot.Dictionary doesn't support C# tuples
+  private System.Collections.Generic.Dictionary<InventoryItemType, (int accumulatedChange, SceneTreeTimer timer)> _pendingChanges = new();
 
   public override void _Ready()
   {
@@ -202,11 +209,11 @@ public partial class Hud : Control
     var inventory = _player.GetInventory();
     foreach (var kvp in inventory)
     {
-      OnInventoryChanged(kvp.Key, kvp.Value);
+      OnInventoryChanged(kvp.Key, kvp.Value, 0);
     }
   }
 
-  private void OnInventoryChanged(InventoryItemType itemType, int newAmount)
+  private void OnInventoryChanged(InventoryItemType itemType, int newAmount, int change)
   {
     if (_player.isLimitedByCapacity)
     {
@@ -219,7 +226,31 @@ public partial class Hud : Control
 
     if (InventoryTreeReferences.TryGetValue(itemType, out TreeItem itemEntry))
     {
-      itemEntry.SetText(1, newAmount.ToString());
+      // Calculate the accumulated change (handles rapid inventory updates)
+      int totalChange = change;
+      if (_pendingChanges.TryGetValue(itemType, out var pending))
+      {
+        // Add to existing accumulated change
+        totalChange = pending.accumulatedChange + change;
+      }
+
+      string increase = "";
+
+      if (totalChange > 0)
+      {
+        increase = $"    (+{totalChange})";
+        itemEntry.SetCustomColor(1, new Color(0.4f, 0.9f, 0.4f));
+      }
+      else if (totalChange < 0)
+      {
+        increase = $"    ({totalChange})";
+        itemEntry.SetCustomColor(1, new Color(0.9f, 0.4f, 0.4f));
+      }
+
+      // Start or reset the timer for this item type
+      StartColorResetTimer(itemType, itemEntry, totalChange);
+
+      itemEntry.SetText(1, newAmount.ToString() + increase);
       return;
     }
     else
@@ -229,5 +260,49 @@ public partial class Hud : Control
       item.SetText(1, newAmount.ToString());
       InventoryTreeReferences.Add(itemType, item);
     }
+  }
+
+  /// <summary>
+  /// Creates or resets a timer that clears the color/change indicator after 2 seconds.
+  /// If a timer already exists for this item type, we disconnect the old callback
+  /// and create a new timer, effectively "resetting" the countdown.
+  /// </summary>
+  /// <param name="itemType">The inventory item type (used as key to track timers)</param>
+  /// <param name="item">The TreeItem to reset</param>
+  /// <param name="accumulatedChange">The total accumulated change to track</param>
+  private void StartColorResetTimer(InventoryItemType itemType, TreeItem item, int accumulatedChange)
+  {
+    // If there's already a pending timer for this item, we need to "cancel" it
+    // SceneTreeTimer can't be truly cancelled, but we can disconnect its callback
+    // and let it expire harmlessly
+    if (_pendingChanges.TryGetValue(itemType, out var existing))
+    {
+      // Remove from tracking - the old timer will fire but do nothing
+      // because ResetItemDisplay checks if the timer is still the active one
+      _pendingChanges.Remove(itemType);
+    }
+
+    // Create a new timer
+    SceneTreeTimer timer = GetTree().CreateTimer(2.2f);
+
+    // Store the pending change info
+    _pendingChanges[itemType] = (accumulatedChange, timer);
+
+    // Connect the timeout - capture the timer reference to verify it's still active
+    timer.Timeout += () =>
+    {
+      // Only reset if this timer is still the active one for this item type
+      // (prevents stale timers from resetting after a newer change came in)
+      if (_pendingChanges.TryGetValue(itemType, out var current) && current.timer == timer)
+      {
+        item.ClearCustomColor(1);
+        string currentText = item.GetText(1);
+        string numberOnly = currentText.Split(' ')[0];
+        item.SetText(1, numberOnly);
+
+        // Clean up the tracking entry
+        _pendingChanges.Remove(itemType);
+      }
+    };
   }
 }

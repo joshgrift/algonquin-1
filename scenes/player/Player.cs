@@ -14,7 +14,7 @@ public class OwnedComponent
 
 public partial class Player : CharacterBody3D, ICanCollect, IDamageable
 {
-  [Signal] public delegate void InventoryChangedEventHandler(InventoryItemType itemType, int newAmount);
+  [Signal] public delegate void InventoryChangedEventHandler(InventoryItemType itemType, int newAmount, int change);
   [Signal] public delegate void CannonFiredEventHandler();
   [Signal] public delegate void CannonReadyToFireEventHandler();
   [Signal] public delegate void DeathEventHandler(string playerName);
@@ -599,10 +599,10 @@ public partial class Player : CharacterBody3D, ICanCollect, IDamageable
     if (price != 0)
     {
       _inventory.UpdateItem(InventoryItemType.Coin, price);
-      EmitSignal(SignalName.InventoryChanged, (int)InventoryItemType.Coin, _inventory.GetItemCount(InventoryItemType.Coin));
+      EmitSignal(SignalName.InventoryChanged, (int)InventoryItemType.Coin, _inventory.GetItemCount(InventoryItemType.Coin), price);
     }
 
-    EmitSignal(SignalName.InventoryChanged, (int)item, _inventory.GetItemCount(item));
+    EmitSignal(SignalName.InventoryChanged, (int)item, _inventory.GetItemCount(item), amount);
 
     if (item == InventoryItemType.Coin && amount > 0)
     {
